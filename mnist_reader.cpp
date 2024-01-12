@@ -56,14 +56,11 @@ std::vector<image> read_image_data(const std::string &filename) {
   return images;
 }
 
-void write_pgm_image(const image &img, const std::string &filename) {
+void write_pgm_image(const image &img, unsigned int dim, const std::string &filename) {
   std::ofstream f(filename, std::ios::binary);
-  f << "P5\n";
-  f << RAW_IMAGE_HEIGHT << "\n";
-  f << RAW_IMAGE_WIDTH << "\n";
-  f << "255\n";
-  // for (const auto &x : img) {
-  //   f << x;
-  // }
+  f << "P5\n"
+    << dim << "\n"
+    << dim << "\n"
+    << "255\n";
   f.write(reinterpret_cast<const char *>(img.data()), img.size());
 }
