@@ -34,9 +34,5 @@
 
 typedef std::vector<unsigned char> image;
 
-void normalize_image(image &img);
-void normalize_images(std::vector<image> &images);
-image resize_image(image &mnist_image);
-std::vector<image> resize_images(std::vector<image> &mnist_images);
 
 #endif

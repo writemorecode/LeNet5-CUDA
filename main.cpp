@@ -5,8 +5,8 @@
 #include "mnist_reader.hpp"
 
 int main() {
-  auto mnist_train_data{read_image_data(FILE_TRAIN_IMAGE)};
-  if (mnist_train_data.size() == 0) {
+  auto train_data{read_image_data(FILE_TRAIN_IMAGE)};
+  if (train_data.size() == 0) {
     std::cerr << "Error: Failed to read training image data.\n";
     return 1;
   }
@@ -17,13 +17,13 @@ int main() {
     return 1;
   }
 
-  if (mnist_train_data.size() != train_label.size()) {
+  if (train_data.size() != train_label.size()) {
     std::cerr << "Number of training images does not match number of training labels.\n";
     return 1;
   }
 
-  auto mnist_test_data{read_image_data(FILE_TEST_IMAGE)};
-  if (mnist_test_data.size() == 0) {
+  auto test_data{read_image_data(FILE_TEST_IMAGE)};
+  if (test_data.size() == 0) {
     std::cerr << "Error: Failed to read testing image data.\n";
     return 1;
   }
@@ -34,14 +34,12 @@ int main() {
     return 1;
   }
 
-  if (mnist_test_data.size() != test_label.size()) {
+  if (test_data.size() != test_label.size()) {
     std::cerr << "Number of testing images does not match number of testing labels.\n";
     return 1;
   }
 
-  normalize_images(mnist_train_data);
-  normalize_images(mnist_test_data);
+  write_pgm_image(test_data[0], 32, "test0.pbm");
+  write_pgm_image(train_data[0], 32, "train1.pbm");
 
-  auto train_data = resize_images(mnist_train_data);
-  auto test_data = resize_images(mnist_test_data);
 }

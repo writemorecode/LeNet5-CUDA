@@ -45,14 +45,18 @@ std::vector<image> read_image_data(const std::string &filename) {
     cols = std::byteswap(cols);
   }
 
-  std::vector<image> images(image_count, image{});
-  for (auto &image : images) {
+  std::vector<image> mnist_images(image_count, image{});
+  for (auto &image : mnist_images) {
     image.resize(rows * cols);
   }
 
-  for (auto &image : images) {
+  for (auto &image : mnist_images) {
     f_image.read(reinterpret_cast<char *>(image.data()), image.size());
   }
+
+  normalize_images(mnist_images);
+  auto images = resize_images(mnist_images);
+
   return images;
 }
 
