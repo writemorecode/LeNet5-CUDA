@@ -1,8 +1,24 @@
 ﻿#include <iostream>
 #include <vector>
 
+#include "conv_layer.hpp"
+#include "fully_connected_layer.hpp"
 #include "lenet.hpp"
 #include "mnist_reader.hpp"
+#include "network.hpp"
+#include "pooling_layer.hpp"
+
+Network buildNetwork() {
+  Network lenet{};
+  lenet.add_layer(std::make_unique<ConvolutionLayer>(32, 5, 1, 6, "C1"));
+  lenet.add_layer(std::make_unique<PoolingLayer>(28, 2, 6, 6, "P1"));
+  lenet.add_layer(std::make_unique<ConvolutionLayer>(14, 5, 6, 16, "C2"));
+  lenet.add_layer(std::make_unique<PoolingLayer>(10, 2, 16, 16, "P2"));
+  lenet.add_layer(std::make_unique<ConvolutionLayer>(5, 5, 16, 120, "C3"));
+  lenet.add_layer(std::make_unique<FullyConnectedLayer>(120, 84, "FC1"));
+  lenet.add_layer(std::make_unique<FullyConnectedLayer>(84, 10, "FC2"));
+  return lenet;
+}
 
 int main() {
   auto train_data{read_image_data(FILE_TRAIN_IMAGE)};
@@ -39,7 +55,8 @@ int main() {
     return 1;
   }
 
-  write_pgm_image(test_data[0], 32, "test0.pbm");
-  write_pgm_image(train_data[0], 32, "train1.pbm");
-
+  auto lenet{buildNetwork()};
+  lenet.display_layers();
+  lenet.forward();
+  lenet.backward();
 }
